@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import model.Patient;
 
 /**
  *
@@ -21,6 +23,19 @@ public class FormPanel extends javax.swing.JPanel {
      */
     public FormPanel() {
         initComponents();
+        imageNameLabel.setVisible(false);
+    }
+    
+    public int tryParseInt(String value) 
+    {
+        try 
+        {
+            return Integer.parseInt(value);
+        } 
+        catch (NumberFormatException e) 
+        {
+            return -1;
+        }
     }
 
     /**
@@ -45,10 +60,12 @@ public class FormPanel extends javax.swing.JPanel {
         messageLabel = new javax.swing.JLabel();
         messageScrollPane = new javax.swing.JScrollPane();
         messageTextArea = new javax.swing.JTextArea();
-        submitButton = new javax.swing.JButton();
+        uploadImage = new javax.swing.JButton();
         maleRadio = new javax.swing.JRadioButton();
         femaleRadio = new javax.swing.JRadioButton();
         genderLabel = new javax.swing.JLabel();
+        imageNameLabel = new javax.swing.JLabel();
+        submitButton = new javax.swing.JButton();
 
         mainTitle.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         mainTitle.setText("Patient Registration");
@@ -67,20 +84,31 @@ public class FormPanel extends javax.swing.JPanel {
         messageTextArea.setRows(5);
         messageScrollPane.setViewportView(messageTextArea);
 
+        uploadImage.setText("Upload image");
+        uploadImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadImageActionPerformed(evt);
+            }
+        });
+
+        genderRadioGroup.add(maleRadio);
+        maleRadio.setText("Male");
+        maleRadio.setActionCommand("MALE");
+
+        genderRadioGroup.add(femaleRadio);
+        femaleRadio.setText("Female");
+        femaleRadio.setActionCommand("FEMALE");
+
+        genderLabel.setText("Gender");
+
+        imageNameLabel.setText("img");
+
         submitButton.setText("Submit");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitButtonActionPerformed(evt);
             }
         });
-
-        genderRadioGroup.add(maleRadio);
-        maleRadio.setText("Male");
-
-        genderRadioGroup.add(femaleRadio);
-        femaleRadio.setText("Female");
-
-        genderLabel.setText("Gender");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -97,7 +125,10 @@ public class FormPanel extends javax.swing.JPanel {
                     .addComponent(genderLabel))
                 .addGap(64, 64, 64)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(submitButton)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(uploadImage)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(imageNameLabel))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(maleRadio)
                         .addGap(18, 18, 18)
@@ -109,7 +140,8 @@ public class FormPanel extends javax.swing.JPanel {
                             .addComponent(lastNameText)
                             .addComponent(ageText)
                             .addComponent(emailText)
-                            .addComponent(messageScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(messageScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(submitButton)))
                 .addContainerGap(249, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -142,21 +174,29 @@ public class FormPanel extends javax.swing.JPanel {
                     .addComponent(maleRadio)
                     .addComponent(femaleRadio)
                     .addComponent(genderLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(uploadImage)
+                    .addComponent(imageNameLabel))
+                .addGap(18, 18, 18)
                 .addComponent(submitButton)
-                .addGap(35, 35, 35))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+    private void uploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadImageActionPerformed
         // TODO add your handling code here:
-        JFileChooser file = new JFileChooser();
+        JFileChooser file = new JFileChooser(); 
         if (file.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             try {
+                System.out.println("Button clicked, file name: " + file.getSelectedFile().getName());
                 BufferedImage img = ImageIO.read(file.getSelectedFile());
                 var edited_image = img.getScaledInstance(60, 80, Image.SCALE_SMOOTH);
                 if (edited_image != null) {
                 ImageIcon icon = new ImageIcon(edited_image); 
+                imageNameLabel.setText(file.getSelectedFile().getName());
+                imageNameLabel.setVisible(true);
+                //imageNameLabel.setIcon(icon);
                 } else {
                 throw new Exception();
                 }
@@ -164,56 +204,69 @@ public class FormPanel extends javax.swing.JPanel {
                 
             }
         }
-//        boolean hasError = false;
-//        StringBuilder errorFields = new StringBuilder();
-//
-//        String firstName = firstNameText.getText();
-//        String lastName = lastNameText.getText();
-//        String email = emailText.getText();
-//        String message = messageTextArea.getText();
-//        int age = tryParseInt(ageText.getText()); //tryParseInt is a function I created to check the version. tryParseInt is actually a functionality in c# which I have experience in.
-//
-//        if(firstName.isEmpty())
-//        {
-//            errorFields.append("First name is empty. \n");
-//            hasError = true;
-//        }
-//        if(lastName.isEmpty())
-//        {
-//            errorFields.append("Last name is empty. \n");
-//            hasError = true;
-//        }
-//        if(age == -1)
-//        {
-//            errorFields.append("Age is invalid. \n");
-//            hasError = true;
-//        }
-//        if(email.isEmpty())
-//        {
-//            errorFields.append("Email is empty. \n");
-//            hasError = true;
-//        }
-//        else if(!email.contains("@"))
-//        {
-//            errorFields.append("Email is invalid. \n");
-//            hasError = true;
-//        }
-//        if(message.isEmpty())
-//        {
-//            errorFields.append("Message is empty. \n");
-//            hasError = true;
-//        }
-//
-//        if(hasError)
-//        {
-//            String errorMessage = "Invalid input, below are the invalid fields:\n" + errorFields;
-//            JOptionPane.showMessageDialog(this, errorMessage, "Customer information", HEIGHT);
-//        }
-//        else
-//        {
-//            String outputMessage = "Name: " + firstName + " " + lastName + "\n" + "Age: " + age + "\n" + "Email: " + email + "\n" + "Message: " + message + "\n";
-//            JOptionPane.showMessageDialog(this, outputMessage, "Customer information", HEIGHT);
-//        }
+    }//GEN-LAST:event_uploadImageActionPerformed
+
+    private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
+        // TODO add your handling code here:
+        boolean hasError = false;
+        StringBuilder errorFields = new StringBuilder();
+        
+        
+        if(firstNameText.getText().isEmpty())
+        {
+            errorFields.append("First name is empty. \n");
+            hasError = true;
+        }
+        if(lastNameText.getText().isEmpty())
+        {
+            errorFields.append("Last name is empty. \n");
+            hasError = true;
+        }
+        if(tryParseInt(ageText.getText()) == -1)
+        {
+            errorFields.append("Age is invalid. \n");
+            hasError = true;
+        }
+        if(emailText.getText().isEmpty())
+        {
+            errorFields.append("Email is empty. \n");
+            hasError = true;
+        }
+        else if(!emailText.getText().contains("@"))
+        {
+            errorFields.append("Email is invalid. \n");
+            hasError = true;
+        }
+        if(messageTextArea.getText().isEmpty())
+        {
+            errorFields.append("Message is empty. \n");
+            hasError = true;
+        }
+        if(imageNameLabel.getText() == "img" || imageNameLabel.getText() == "")
+        {
+            errorFields.append("Image is missing. \n");
+            hasError = true;
+        }
+        
+
+        if(hasError)
+        {
+            String errorMessage = "Invalid input, below are the invalid fields:\n" + errorFields;
+            JOptionPane.showMessageDialog(this, errorMessage, "Customer information", HEIGHT);
+        }
+        else
+        {
+            Patient patient = new Patient();
+            patient.setFirstName(firstNameText.getText());
+            patient.setLastName(lastNameText.getText());
+            patient.setEmail(emailText.getText());
+            patient.setAge(tryParseInt(ageText.getText())); //tryParseInt is a function I created to check the version. tryParseInt is actually a functionality in c# which I have experience in.
+            patient.setMessage(messageTextArea.getText());
+            patient.setGender(genderRadioGroup.getSelection().getActionCommand());
+            
+            String outputMessage = "Name: " + patient.getFirstName() + " " + patient.getLastName() + "\n" + "Age: " + patient.getAge() + "\n" + "Gender: " + genderRadioGroup.getSelection().getActionCommand() + "\n" + "Email: " + patient.getEmail() + "\n" + "Message: " + patient.getMessage() + "\n";
+            JOptionPane.showMessageDialog(this, outputMessage, "Customer information", HEIGHT);
+        }
     }//GEN-LAST:event_submitButtonActionPerformed
 
 
@@ -227,6 +280,7 @@ public class FormPanel extends javax.swing.JPanel {
     private javax.swing.JTextField firstNameText;
     private javax.swing.JLabel genderLabel;
     private javax.swing.ButtonGroup genderRadioGroup;
+    private javax.swing.JLabel imageNameLabel;
     private javax.swing.JLabel lastNameLabel;
     private javax.swing.JTextField lastNameText;
     private javax.swing.JLabel mainTitle;
@@ -235,5 +289,6 @@ public class FormPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextArea messageTextArea;
     private javax.swing.JButton submitButton;
+    private javax.swing.JButton uploadImage;
     // End of variables declaration//GEN-END:variables
 }

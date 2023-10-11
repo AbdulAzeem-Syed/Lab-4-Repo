@@ -53,7 +53,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
                       <Component id="viewFormButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="296" max="32767" attributes="0"/>
+                      <EmptySpace pref="297" max="32767" attributes="0"/>
                       <Component id="viewDetailsButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
                   </Group>
@@ -83,8 +83,11 @@
             </Component>
             <Component class="javax.swing.JButton" name="viewDetailsButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="View Button"/>
+                <Property name="text" type="java.lang.String" value="View Details"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewDetailsButtonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

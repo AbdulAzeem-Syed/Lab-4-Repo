@@ -45,7 +45,12 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        viewDetailsButton.setText("View Button");
+        viewDetailsButton.setText("View Details");
+        viewDetailsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewDetailsButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(topPanel);
         topPanel.setLayout(topPanelLayout);
@@ -54,7 +59,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(topPanelLayout.createSequentialGroup()
                 .addGap(88, 88, 88)
                 .addComponent(viewFormButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 296, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 297, Short.MAX_VALUE)
                 .addComponent(viewDetailsButton)
                 .addGap(136, 136, 136))
         );
@@ -94,6 +99,10 @@ public class MainFrame extends javax.swing.JFrame {
         CardLayout layout = (CardLayout) bottomPanel.getLayout();
         layout.next(bottomPanel);
     }//GEN-LAST:event_viewFormButtonActionPerformed
+
+    private void viewDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewDetailsButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_viewDetailsButtonActionPerformed
 
     /**
      * @param args the command line arguments
