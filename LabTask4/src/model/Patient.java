@@ -4,6 +4,9 @@
  */
 package model;
 
+import javax.swing.ButtonModel;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Abdul
@@ -15,13 +18,31 @@ public class Patient {
     private String email;
     private String message;
     private int age;
-    private String gender;
+    private ButtonModel gender;
+    private ImageIcon image;
+    private String type;
 
-    public String getGender() {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public ImageIcon getImage() {
+        return image;
+    }
+
+    public void setImage(ImageIcon image) {
+        this.image = image;
+    }
+
+    public ButtonModel getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(ButtonModel gender) {
         this.gender = gender;
     }
 

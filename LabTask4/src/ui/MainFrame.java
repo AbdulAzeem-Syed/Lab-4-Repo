@@ -86,7 +86,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
         );
 
         pack();
@@ -94,7 +94,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void viewFormButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFormButtonActionPerformed
         // TODO add your handling code here:
-        FormPanel newFormPanel = new FormPanel();
+        FormPanel newFormPanel = new FormPanel(bottomPanel);
         bottomPanel.add(newFormPanel);
         CardLayout layout = (CardLayout) bottomPanel.getLayout();
         layout.next(bottomPanel);
@@ -102,6 +102,10 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void viewDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewDetailsButtonActionPerformed
         // TODO add your handling code here:
+        ViewPanel newViewPanel = new ViewPanel();
+        bottomPanel.add(newViewPanel);
+        CardLayout layout = (CardLayout) bottomPanel.getLayout();
+        layout.next(bottomPanel);
     }//GEN-LAST:event_viewDetailsButtonActionPerformed
 
     /**

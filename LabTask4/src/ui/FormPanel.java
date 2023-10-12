@@ -4,12 +4,14 @@
  */
 package ui;
 
+import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import model.Patient;
 
 /**
@@ -21,9 +23,12 @@ public class FormPanel extends javax.swing.JPanel {
     /**
      * Creates new form FormPanel
      */
-    public FormPanel() {
+    private JPanel bottomPanel;
+    private Patient patient = new Patient();
+    public FormPanel(JPanel bottomPanel) {
         initComponents();
         imageNameLabel.setVisible(false);
+        this.bottomPanel = bottomPanel;
     }
     
     public int tryParseInt(String value) 
@@ -66,6 +71,8 @@ public class FormPanel extends javax.swing.JPanel {
         genderLabel = new javax.swing.JLabel();
         imageNameLabel = new javax.swing.JLabel();
         submitButton = new javax.swing.JButton();
+        typeLabel = new javax.swing.JLabel();
+        typeComboBox = new javax.swing.JComboBox<>();
 
         mainTitle.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         mainTitle.setText("Patient Registration");
@@ -110,6 +117,10 @@ public class FormPanel extends javax.swing.JPanel {
             }
         });
 
+        typeLabel.setText("Type");
+
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Regular", "Emergency" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,27 +133,28 @@ public class FormPanel extends javax.swing.JPanel {
                     .addComponent(firstNameLabel)
                     .addComponent(lastNameLabel)
                     .addComponent(emailLabel)
-                    .addComponent(genderLabel))
+                    .addComponent(genderLabel)
+                    .addComponent(typeLabel))
                 .addGap(64, 64, 64)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(uploadImage)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(imageNameLabel))
+                    .addComponent(imageNameLabel)
+                    .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(maleRadio)
                         .addGap(18, 18, 18)
                         .addComponent(femaleRadio))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(mainTitle)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(firstNameText)
-                            .addComponent(lastNameText)
-                            .addComponent(ageText)
-                            .addComponent(emailText)
-                            .addComponent(messageScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(submitButton)))
-                .addContainerGap(249, Short.MAX_VALUE))
+                        .addComponent(firstNameText, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lastNameText, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(ageText, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(emailText, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(messageScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(uploadImage)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
+                            .addComponent(submitButton))))
+                .addContainerGap(205, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,12 +188,18 @@ public class FormPanel extends javax.swing.JPanel {
                     .addComponent(genderLabel))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(uploadImage)
-                    .addComponent(imageNameLabel))
-                .addGap(18, 18, 18)
-                .addComponent(submitButton)
-                .addContainerGap(38, Short.MAX_VALUE))
+                    .addComponent(typeLabel)
+                    .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(submitButton)
+                    .addComponent(uploadImage))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(imageNameLabel)
+                .addContainerGap(113, Short.MAX_VALUE))
         );
+
+        typeComboBox.getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
     private void uploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadImageActionPerformed
@@ -191,9 +209,9 @@ public class FormPanel extends javax.swing.JPanel {
             try {
                 System.out.println("Button clicked, file name: " + file.getSelectedFile().getName());
                 BufferedImage img = ImageIO.read(file.getSelectedFile());
-                var edited_image = img.getScaledInstance(60, 80, Image.SCALE_SMOOTH);
+                var edited_image = img.getScaledInstance(120, 160, Image.SCALE_SMOOTH);
                 if (edited_image != null) {
-                ImageIcon icon = new ImageIcon(edited_image); 
+                patient.setImage(new ImageIcon(edited_image));
                 imageNameLabel.setText(file.getSelectedFile().getName());
                 imageNameLabel.setVisible(true);
                 //imageNameLabel.setIcon(icon);
@@ -256,16 +274,21 @@ public class FormPanel extends javax.swing.JPanel {
         }
         else
         {
-            Patient patient = new Patient();
             patient.setFirstName(firstNameText.getText());
             patient.setLastName(lastNameText.getText());
             patient.setEmail(emailText.getText());
             patient.setAge(tryParseInt(ageText.getText())); //tryParseInt is a function I created to check the version. tryParseInt is actually a functionality in c# which I have experience in.
             patient.setMessage(messageTextArea.getText());
-            patient.setGender(genderRadioGroup.getSelection().getActionCommand());
+            patient.setGender(genderRadioGroup.getSelection());
+            patient.setType(typeComboBox.getSelectedItem().toString());
             
-            String outputMessage = "Name: " + patient.getFirstName() + " " + patient.getLastName() + "\n" + "Age: " + patient.getAge() + "\n" + "Gender: " + genderRadioGroup.getSelection().getActionCommand() + "\n" + "Email: " + patient.getEmail() + "\n" + "Message: " + patient.getMessage() + "\n";
-            JOptionPane.showMessageDialog(this, outputMessage, "Customer information", HEIGHT);
+            ViewPanel newViewPanel = new ViewPanel(patient);
+            bottomPanel.add(newViewPanel);
+            CardLayout layout = (CardLayout) bottomPanel.getLayout();
+            layout.next(bottomPanel);
+            
+            //String outputMessage = "Name: " + patient.getFirstName() + " " + patient.getLastName() + "\n" + "Age: " + patient.getAge() + "\n" + "Gender: " + genderRadioGroup.getSelection().getActionCommand() + "\n" + "Email: " + patient.getEmail() + "\n" + "Message: " + patient.getMessage() + "\n";
+            //JOptionPane.showMessageDialog(this, outputMessage, "Customer information", HEIGHT);
         }
     }//GEN-LAST:event_submitButtonActionPerformed
 
@@ -289,6 +312,8 @@ public class FormPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane messageScrollPane;
     private javax.swing.JTextArea messageTextArea;
     private javax.swing.JButton submitButton;
+    private javax.swing.JComboBox<String> typeComboBox;
+    private javax.swing.JLabel typeLabel;
     private javax.swing.JButton uploadImage;
     // End of variables declaration//GEN-END:variables
 }
